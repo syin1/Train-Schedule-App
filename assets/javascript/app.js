@@ -13,20 +13,44 @@ $(document).ready(function() {
   var database = firebase.database();
 
   $('#submit').on('click', function() {
-    database.ref().push({
-      trainname: $('#trainname')
-        .val()
-        .trim(),
-      destination: $('#destination')
-        .val()
-        .trim(),
-      firsttraintime: $('#firsttraintime')
-        .val()
-        .trim(),
-      frequency: $('#frequency')
-        .val()
-        .trim()
-    });
+    var trainname = $('#trainname')
+      .val()
+      .trim();
+
+    var destination = $('#destination')
+      .val()
+      .trim();
+
+    var firsttraintime = $('#firsttraintime')
+      .val()
+      .trim();
+
+    var frequency = $('#frequency')
+      .val()
+      .trim();
+
+    if (
+      trainname === '' ||
+      destination === '' ||
+      firsttraintime === '' ||
+      frequency === ''
+    ) {
+      alert('No field can be empty!');
+      return false;
+    } else if (!moment(firsttraintime, 'HH:mm', true).isValid()) {
+      alert('First train time must be in military format!');
+      return false;
+    } else if (isNaN(parseInt(frequency))) {
+      alert('Frequency must be a number!');
+      return false;
+    } else {
+      database.ref().push({
+        trainname: trainname,
+        destination: destination,
+        firsttraintime: firsttraintime,
+        frequency: frequency
+      });
+    }
   });
 
   database.ref().on(
@@ -51,8 +75,6 @@ $(document).ready(function() {
           .format('hh:mm a');
       }
 
-      console.log('Arrival:', nextArrival);
-      console.log('Current:', current);
       var minutesAway = moment(nextArrival, 'hh:mm a').diff(
         current.startOf('minute'),
         'minutes'
