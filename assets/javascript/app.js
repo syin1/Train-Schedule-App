@@ -32,14 +32,39 @@ $(document).ready(function() {
   database.ref().on(
     'child_added',
     function(snapshot) {
-      var value = snapshot.val();
+      var obj = snapshot.val();
+
+      var firsttraintime = moment(obj.firsttraintime, 'HH:mm');
+      var current = moment();
+      var diff = current.diff(firsttraintime, 'minutes');
+      var nextArrival;
+
+      var frequency = parseInt(obj.frequency);
+
+      if (diff <= 0) {
+        nextArrival = firsttraintime.format('hh:mm a');
+      } else if (diff % frequency === 0) {
+        nextArrival = current.format('hh:mm a');
+      } else {
+        nextArrival = firsttraintime
+          .add(Math.ceil(diff / frequency) * frequency, 'minutes')
+          .format('hh:mm a');
+      }
+
+      console.log('Arrival:', nextArrival);
+      console.log('Current:', current);
+      var minutesAway = moment(nextArrival, 'hh:mm a').diff(
+        current.startOf('minute'),
+        'minutes'
+      );
+
       var row = $('<tr>');
 
-      row.append($('<td>)').text(value.trainname));
-      row.append($('<td>)').text(value.destination));
-      row.append($('<td>)').text(value.frequency));
-      row.append($('<td>)').text(value.firsttraintime));
-      row.append($('<td>)').text(10));
+      row.append($('<td>').text(obj.trainname));
+      row.append($('<td>').text(obj.destination));
+      row.append($('<td>').text(frequency));
+      row.append($('<td>').text(nextArrival));
+      row.append($('<td>').text(minutesAway));
 
       $('#tabledisplay').append(row);
     },
