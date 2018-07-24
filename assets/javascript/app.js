@@ -120,9 +120,76 @@ $(document).ready(function() {
     }
   );
 
+  // database.ref().on(
+  //   'value',
+  //   function(snapshot) {
+  //     var key = Object.keys(snapshot.val())[0];
+  //     $('#' + key).empty();
+
+  //     var obj = snapshot.val();
+
+  //     var firsttraintime = moment(obj.firsttraintime, 'HH:mm');
+  //     var current = moment();
+  //     var diff = current.diff(firsttraintime, 'minutes');
+  //     var nextArrival;
+
+  //     var frequency = parseInt(obj.frequency);
+
+  //     if (diff <= 0) {
+  //       nextArrival = firsttraintime.format('hh:mm a');
+  //     } else if (diff % frequency === 0) {
+  //       nextArrival = current.format('hh:mm a');
+  //     } else {
+  //       nextArrival = firsttraintime
+  //         .add(Math.ceil(diff / frequency) * frequency, 'minutes')
+  //         .format('hh:mm a');
+  //     }
+
+  //     var minutesAway = moment(nextArrival, 'hh:mm a').diff(
+  //       current.startOf('minute'),
+  //       'minutes'
+  //     );
+
+  //     $('#' + key).append($('<td>').text(obj.trainname));
+  //     alert(obj.trainname);
+  //     $('#' + key).append($('<td>').text(obj.destination));
+  //     $('#' + key).append($('<td>').text(frequency));
+  //     $('#' + key).append($('<td>').text(nextArrival));
+  //     $('#' + key).append($('<td>').text(minutesAway));
+  //     $('#' + key).append(
+  //       $('<td>').html(
+  //         "<button type='button' data-key='" +
+  //           key +
+  //           "' class='btn btn-outline-danger remove'>Remove</button><span> </span><button type='button' data-key='" +
+  //           key +
+  //           "' class='btn btn-outline-warning update' data-toggle='modal' data-target='#exampleModal' " +
+  //           "data-name='" +
+  //           obj.trainname +
+  //           "' data-dest='" +
+  //           obj.destination +
+  //           "' data-time='" +
+  //           obj.firsttraintime +
+  //           "' data-freq='" +
+  //           obj.frequency +
+  //           "' " +
+  //           '>Update</button>'
+  //       )
+  //     );
+
+  //   },
+  //   function(errorObject) {
+  //     console.log('Error: ' + errorObject.code);
+  //   }
+  // );
+
   database.ref().on(
     'value',
-    function(snapshot) {},
+    function(snapshot) {
+      var obj = snapshot.val();
+      var key = Object.keys(snapshot.val())[0];
+      console.log(obj);
+      console.log(obj[0]);
+    },
     function(errorObject) {
       console.log('Error: ' + errorObject.code);
     }
