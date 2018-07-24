@@ -91,11 +91,23 @@ $(document).ready(function() {
           snapshot.key +
           "' class='btn btn-outline-danger remove'>Remove</button><span> </span><button type='button' data-key='" +
           snapshot.key +
-          "' class='btn btn-outline-warning update'>Update</button>"
+          "' class='btn btn-outline-warning update' data-toggle='modal' data-target='#exampleModal' " +
+          "data-name='" +
+          obj.trainname +
+          "' data-dest='" +
+          obj.destination +
+          "' data-time='" +
+          obj.firsttraintime +
+          "' data-freq='" +
+          obj.frequency +
+          "' " +
+          '>Update</button>'
       )
     );
 
     $('#tabledisplay').append(row);
+
+    $('#updateform').attr('data-key', snapshot.key);
   }
 
   database.ref().on(
@@ -103,6 +115,14 @@ $(document).ready(function() {
     function(snapshot) {
       updateList(snapshot);
     },
+    function(errorObject) {
+      console.log('Error: ' + errorObject.code);
+    }
+  );
+
+  database.ref().on(
+    'value',
+    function(snapshot) {},
     function(errorObject) {
       console.log('Error: ' + errorObject.code);
     }
@@ -123,5 +143,56 @@ $(document).ready(function() {
       .ref()
       .child($(this).attr('data-key'))
       .remove();
+  });
+
+  $(document.body).on('click', '.update', function() {
+    $('#trainnameUpdate').val($(this).attr('data-name'));
+    $('#destinationUpdate').val($(this).attr('data-dest'));
+    $('#firsttraintimeUpdate').val($(this).attr('data-time'));
+    $('#frequencyUpdate').val($(this).attr('data-freq'));
+  });
+
+  $('#update').on('click', function() {
+    var trainname = $('#trainnameUpdate')
+      .val()
+      .trim();
+
+    var destination = $('#destinationUpdate')
+      .val()
+      .trim();
+
+    var firsttraintime = $('#firsttraintimeUpdate')
+      .val()
+      .trim();
+
+    var frequency = $('#frequencyUpdate')
+      .val()
+      .trim();
+
+    if (
+      trainname === '' ||
+      destination === '' ||
+      firsttraintime === '' ||
+      frequency === ''
+    ) {
+      alert('No field can be empty!');
+      return false;
+    } else if (!moment(firsttraintime, 'HH:mm', true).isValid()) {
+      alert('First train time must be in military format!');
+      return false;
+    } else if (isNaN(parseInt(frequency))) {
+      alert('Frequency must be a number!');
+      return false;
+    } else {
+      database
+        .ref()
+        .child($('#updateform').attr('data-key'))
+        .set({
+          trainname: trainname,
+          destination: destination,
+          firsttraintime: firsttraintime,
+          frequency: frequency
+        });
+    }
   });
 });
