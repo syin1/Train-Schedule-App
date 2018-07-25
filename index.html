@@ -2,134 +2,59 @@
 <html>
 
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Page Title</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
-    crossorigin="anonymous">
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-    crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
+  <meta charset="UTF-8">
+  <title>Sample FirebaseUI App</title>
+  <!-- *******************************************************************************************
+       * TODO(DEVELOPER): Paste the initialization snippet from:
+       * Firebase Console > Overview > Add Firebase to your web app. *
+       ***************************************************************************************** -->
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.2.0/firebaseui.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.2.0/firebaseui.css" />
+  <script type="text/javascript">
+
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDbPtwKvzA17cZVIHhN0GDTTYD5aqA-d7Y",
+      authDomain: "train-schedule-app-997c9.firebaseapp.com",
+      databaseURL: "https://train-schedule-app-997c9.firebaseio.com",
+      projectId: "train-schedule-app-997c9",
+      storageBucket: "train-schedule-app-997c9.appspot.com",
+      messagingSenderId: "397219715685"
+    };
+    firebase.initializeApp(config);
+
+    // FirebaseUI config.
+    var uiConfig = {
+      signInSuccessUrl: 'mainapp.html',
+      signInOptions: [
+        // Leave the lines as is for the providers you want to offer your users.
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+        firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+      ],
+      // Terms of service url.
+      // tosUrl: '<your-tos-url>',
+      // Privacy policy url.
+      // privacyPolicyUrl: '<your-privacy-policy-url>'
+    };
+
+    // Initialize the FirebaseUI Widget using Firebase.
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    // The start method will wait until the DOM is loaded.
+    ui.start('#firebaseui-auth-container', uiConfig);
+  </script>
 </head>
 
 <body>
-  <div class="container">
-    <div class="jumbotron jumbotron-fluid text-white bg-dark">
-      <div class="container">
-        <h1 class="display-4 text-center">Anytime is Train Time</h1>
-        <p class="lead text-center">Choo Choo. Chee Chee.</p>
-      </div>
-    </div>
-
-    <!-- Modal: Update Train Schedule -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Update Train Schedule</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="updateform">
-              <div class="form-group">
-                <label for="trainname">Train Name</label>
-                <input type="text" class="form-control" id="trainnameUpdate">
-              </div>
-              <div class="form-group">
-                <label for="destination">Destination</label>
-                <input type="text" class="form-control" id="destinationUpdate">
-              </div>
-              <div class="form-group">
-                <label for="firsttraintime">First Train Time (HH:mm - military time)</label>
-                <input type="text" class="form-control" id="firsttraintimeUpdate">
-              </div>
-              <div class="form-group">
-                <label for="frequency">Frequency (min)</label>
-                <input type="text" class="form-control" id="frequencyUpdate">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="update">Update</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="card">
-          <div class="card-header bg-primary text-white">
-            Current Train Schedule
-          </div>
-          <div class="card-body table-responsive">
-            <table class="table table-striped text-center">
-              <thead>
-                <tr>
-                  <th scope="col">Train Name</th>
-                  <th scope="col">Destination</th>
-                  <th scope="col">Frequency (min)</th>
-                  <th scope="col">Next Arrival</th>
-                  <th scope="col">Minutes Away</th>
-                </tr>
-              </thead>
-              <tbody id="tabledisplay">
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <br>
-    <br>
-
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="card">
-          <div class="card-header bg-primary text-white">
-            Add Train
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="form-group">
-                <label for="trainname">Train Name</label>
-                <input type="text" class="form-control" id="trainname">
-              </div>
-              <div class="form-group">
-                <label for="destination">Destination</label>
-                <input type="text" class="form-control" id="destination">
-              </div>
-              <div class="form-group">
-                <label for="firsttraintime">First Train Time (HH:mm - military time)</label>
-                <input type="text" class="form-control" id="firsttraintime">
-              </div>
-              <div class="form-group">
-                <label for="frequency">Frequency (min)</label>
-                <input type="text" class="form-control" id="frequency">
-              </div>
-              <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <br>
-    <br>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
-    crossorigin="anonymous"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
-  <script src="assets/javascript/moment.js"></script>
-  <script src="assets/javascript/app.js"></script>
+  <!-- The surrounding HTML is left untouched by FirebaseUI.
+         Your app may use that space for branding, controls and other customizations.-->
+  <h1>Train Scheduler App</h1>
+  <div id="firebaseui-auth-container"></div>
 </body>
 
 </html>
