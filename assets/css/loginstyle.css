@@ -1,0 +1,15 @@
+body,
+html {
+  height: 100%;
+  font-family: 'Eczar', serif;
+  color: white;
+  font-size: 36px;
+  text-align: center;
+}
+
+.container-fluid {
+  /* margin-left: 5px; */
+  /* margin-right: 5px; */
+  background-image: url('../images/train-bg.jpg');
+  min-height: 100%;
+}

@@ -3,7 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Sample FirebaseUI App</title>
+  <title>Train Schedule App Login</title>
+  <link rel="stylesheet" href="assets/css/reset.css">
+  <link rel="stylesheet" href="assets/css/loginstyle.css">
+  <link href="https://fonts.googleapis.com/css?family=Eczar" rel="stylesheet">
   <script src="https://cdn.firebase.com/libs/firebaseui/3.2.0/firebaseui.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.2.0/firebaseui.css" />
@@ -27,8 +30,7 @@
         // Leave the lines as is for the providers you want to offer your users.
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+        firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
       // Terms of service url.
       // tosUrl: '<your-tos-url>',
@@ -44,8 +46,13 @@
 </head>
 
 <body>
-  <h1>Train Scheduler</h1>
-  <div id="firebaseui-auth-container"></div>
+  <div class="container-fluid">
+    <br>
+    <h1>Train Schedule App</h1>
+    <br>
+    <br>
+    <div id="firebaseui-auth-container"></div>
+  </div>
 </body>
 
 </html>
